@@ -4,13 +4,13 @@
 
 Build this image:
 
-    docker build . -t duniter/duniter-ts
+    docker build . -t fabwice/docker-duniter-ts
 
 ## Usage
 
 Start the node:
 
-    docker run -d -p127.0.0.1:9220:9220 -p10901:10901 -p20901:20901 --name duniter duniter/duniter-ts
+    docker run -d -p127.0.0.1:9220:9220 -p10901:10901 -p20901:20901 --name duniter fabwice/docker-duniter-ts
 
 You can execute `duniter` commands on the started container, for example:
 
@@ -37,7 +37,7 @@ Restart the stopped node:
 
 If the `/etc/duniter/keys.yml` is found on the image, it will automatically be used as keyfile for the server. If you have such a file in your current directory, you can start the node with:
 
-    docker run -d -p127.0.0.1:9220:9220 -p10901:10901 -p20901:20901 --mount src="${PWD}",dst=/etc/duniter --name duniter duniter/duniter-ts
+    docker run -d -p127.0.0.1:9220:9220 -p10901:10901 -p20901:20901 --mount src="${PWD}",dst=/etc/duniter --name duniter fabwice/docker-duniter-ts
 
 Note that your file must be readable by the in-image `duniter:duniter` user (uid:gid is 1111:1111).
 
@@ -49,7 +49,7 @@ The Duniter home directory is `/var/lib/duniter`. You may mount this directory o
 
 If you give parameters to the image when creating container, they will be given to the Duniter node. In this case, it will not start the Duniter daemon. Example:
 
-    docker run -it --name duniter duniter/duniter-ts logs
+    docker run -it --name duniter fabwice/docker-duniter-ts logs
 
 When no parameters are given, `duniter` is called with the command `direct_webstart`.
 

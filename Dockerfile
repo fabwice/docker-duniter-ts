@@ -9,7 +9,7 @@
 # First stage, application building
 FROM node:8-alpine AS dun-compile
 
-ARG DUNITER_VERSION=1.7.1
+ARG DUNITER_VERSION=1.6.25
 ARG UI_VERSION=1.6.x
 
 RUN apk update && \

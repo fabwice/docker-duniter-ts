@@ -7,9 +7,9 @@
 # bug for compiling with MuslC. Remove the line when it becomes useless.
 
 # First stage, application building
-FROM node:8-alpine AS dun-compile
+FROM node:8.14-alpine AS dun-compile
 
-ARG DUNITER_VERSION=1.6.25
+ARG DUNITER_VERSION=1.7.6
 ARG UI_VERSION=1.6.x
 
 RUN apk update && \
@@ -26,7 +26,7 @@ RUN mkdir /duniter && cd /duniter && \
 	rm -rf test/ && find . -name '*.ts' -exec rm "{}" +
 
 # Second stage
-FROM node:8-alpine
+FROM node:9-alpine
 
 RUN addgroup -S -g 1111 duniter && \
 	adduser -SD -h /duniter -G duniter -u 1111 duniter

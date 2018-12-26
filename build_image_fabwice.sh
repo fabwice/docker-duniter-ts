@@ -1,1 +1,1 @@
-docker build . -t fabwice/docker-duniter-ts:v1.7.6
+docker build . -t fabwice/docker-duniter-ts:v1.7.7

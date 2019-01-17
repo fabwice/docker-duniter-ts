@@ -15,7 +15,7 @@ Start the node:
 You can execute `duniter` commands on the started container, for example:
 
     docker exec -it duniter duniter wizard key
-    docker exec -it duniter duniter sync g1.duniter.fr 443
+    docker exec -it duniter duniter sync g1.duniter.fr
 
 You also can open a new terminal on the started container with:
 

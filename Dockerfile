@@ -9,7 +9,7 @@
 # First stage, application building
 FROM fabwice/docker-alpine-node:8.14.0 AS dun-compile
 
-ARG DUNITER_VERSION=1.7.17
+ARG DUNITER_VERSION=1.7.18
 ARG UI_VERSION=1.7.x
 
 RUN apk update && \

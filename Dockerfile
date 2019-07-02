@@ -7,7 +7,7 @@
 # bug for compiling with MuslC. Remove the line when it becomes useless.
 
 # First stage, application building
-FROM fabwice/docker-alpine-node:8.14.0 AS dun-compile
+FROM fabwice/docker-alpine-node:10.9.0 AS dun-compile
 
 ARG DUNITER_VERSION=1.7.19
 ARG UI_VERSION=1.7.x

@@ -7,7 +7,7 @@
 # bug for compiling with MuslC. Remove the line when it becomes useless.
 
 # First stage, application building
-FROM fabwice/docker-alpine-node:10.9.0 AS dun-compile
+FROM fabwice/docker-alpine-node:9.9.0 AS dun-compile
 
 ARG DUNITER_VERSION=1.7.21
 ARG UI_VERSION=1.7.x
@@ -26,7 +26,7 @@ RUN mkdir /duniter && cd /duniter && \
 	rm -rf test/ && find . -name '*.ts' -exec rm "{}" +
 
 # Second stage
-FROM fabwice/docker-alpine-node:8.14.0
+FROM fabwice/docker-alpine-node:9.9.0
 
 RUN addgroup -S -g 1111 duniter && \
 	adduser -SD -h /duniter -G duniter -u 1111 duniter

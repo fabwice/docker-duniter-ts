@@ -1,15 +1,12 @@
 # Image for Duniter releases on Linux.
 #
 # Building this image:
-#   docker build . -t duniter/duniter-ts
-#
-# TODO: npm install sqlite3@3.1.11 is required since previous versions have a
-# bug for compiling with MuslC. Remove the line when it becomes useless.
+#   docker build . -t duniter/duniter
 
 # First stage, application building
-FROM fabwice/docker-alpine-node:9.9.0 AS dun-compile
+FROM node:8-alpine AS dun-compile
 
-ARG DUNITER_VERSION=1.7.21
+ARG DUNITER_VERSION=1.7.19
 ARG UI_VERSION=1.7.x
 
 RUN apk update && \
@@ -18,20 +15,19 @@ RUN apk update && \
 
 RUN mkdir /duniter && cd /duniter && \
 	wget https://git.duniter.org/nodes/typescript/duniter/repository/v${DUNITER_VERSION}/archive.tar.gz && \
-	tar -xzf archive.tar.gz && rm *.tar.gz && mv duniter-* duniter-ts && \
+	tar -xzf archive.tar.gz && rm *.tar.gz && mv duniter-* duniter && \
 	apk add --update python make g++ && \
-	cd /duniter/duniter-ts && \
-	yarn add sqlite3@3.1.11 && \
+	cd /duniter/duniter && \
 	yarn install --production && yarn add duniter-ui@${UI_VERSION} && \
 	rm -rf test/ && find . -name '*.ts' -exec rm "{}" +
 
 # Second stage
-FROM fabwice/docker-alpine-node:9.9.0
+FROM node:8-alpine
 
 RUN addgroup -S -g 1111 duniter && \
 	adduser -SD -h /duniter -G duniter -u 1111 duniter
 RUN mkdir -p /var/lib/duniter /etc/duniter && chown duniter:duniter /var/lib/duniter /etc/duniter
-COPY --from=dun-compile --chown=duniter:duniter /duniter/duniter-ts /duniter/duniter-ts
+COPY --from=dun-compile --chown=duniter:duniter /duniter/duniter /duniter/duniter
 
 VOLUME /var/lib/duniter
 VOLUME /etc/duniter

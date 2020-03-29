@@ -1,0 +1,54 @@
+stages:
+  - build
+  - deploy
+
+.runner: &runner
+  image: docker:git
+  tags:
+    - docker
+  services:
+    - docker:dind
+
+build_test:
+  <<: *runner
+  stage: build
+  script:
+    - docker build .
+  except:
+    - tags
+
+build_tag:
+  <<: *runner
+  stage: build
+  script:
+    - docker build --pull -t "$CI_REGISTRY_IMAGE:$CI_BUILD_TAG" .
+    - docker login -u "gitlab-ci-token" -p "$CI_BUILD_TOKEN" $CI_REGISTRY
+    - docker push "$CI_REGISTRY_IMAGE:$CI_BUILD_TAG"
+  only:
+    - tags
+
+deploy_tag:
+  <<: *runner
+  stage: deploy
+  script:
+    - docker pull "$CI_REGISTRY_IMAGE:$CI_BUILD_TAG"
+    - docker tag "$CI_REGISTRY_IMAGE:$CI_BUILD_TAG" $(basename "${CI_PROJECT_NAMESPACE}")/"${CI_PROJECT_NAME}":"$CI_BUILD_TAG"
+    - docker login -u "duniterteam" -p "$DUNITERTEAM_PASSWD"
+    - docker push $(basename "${CI_PROJECT_NAMESPACE}")/"${CI_PROJECT_NAME}":"$CI_BUILD_TAG"
+  only:
+    - tags
+
+deploy_latest:
+  <<: *runner
+  stage: deploy
+  script:
+    - docker pull "$CI_REGISTRY_IMAGE:$CI_BUILD_TAG"
+    - docker tag "$CI_REGISTRY_IMAGE:$CI_BUILD_TAG" $(basename "${CI_PROJECT_NAMESPACE}")/"${CI_PROJECT_NAME}"
+    - docker login -u "duniterteam" -p "$DUNITERTEAM_PASSWD"
+    - docker push $(basename "${CI_PROJECT_NAMESPACE}")/"${CI_PROJECT_NAME}"
+  environment:
+    name: latest
+    url: https://hub.docker.com/r/$(basename "${CI_PROJECT_NAMESPACE}")/"${CI_PROJECT_NAME}"/
+  when: manual
+  only:
+    - tags

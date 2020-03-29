@@ -17,5 +17,5 @@ if [[ -f /etc/duniter/key.yml ]]; then
 fi
 
 # Start duniter
-cd /duniter/duniter-ts/
+cd /duniter/duniter/
 bin/duniter ${DUNITER_OPTS} "$@"
